@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import './onboarding_screen.dart';
+import './landing_page.dart';
+import './greenloop_theme.dart';
 
 void main() {
   runApp(GreenLoopApp());
@@ -12,8 +13,11 @@ class GreenLoopApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'GreenLoop',
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: OnboardingScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        scaffoldBackgroundColor: GreenLoopTheme.backgroundWhite,
+      ),
+      home: LandingPage(),
     );
   }
 }
