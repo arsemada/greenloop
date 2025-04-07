@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:greenloop/application/auth/redister_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'presentation/screens/sign_up_screen.dart';
 import 'presentation/screens/profile_screen.dart';
 import 'presentation/screens/auth_callback_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:flutter/material.dart';
+import 'package:greenloop/application/auth/auth_get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy(); // Use clean URL paths
 
@@ -16,6 +20,16 @@ Future<void> main() async {
 
   runApp(const MyApp());
 }
+
+// void main() async{
+//   //Supabase setup
+// await Supabase.initialize(
+//   anonKey:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2cXN6cXFya25sa3ViamlscHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwMTEzMjAsImV4cCI6MjA1OTU4NzMyMH0.QPKtvmju4W_XGCvCIxePrCNU5dMJri6NJWzyiSLTz78" ,
+//   url:"https://dvqszqqrknlkubjilpsj.supabase.co" ,
+// );
+
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -29,9 +43,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Set the initial route to the SignUpScreen
       routes: {
-        '/': (context) => const SignUpScreen(),
-        '/auth/callback': (context) => const AuthCallbackScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        '/': (context) => const AuthGet(),
+        // '/auth/callback': (context) => const AuthCallbackScreen(),
+        // '/profile': (context) => const ProfileScreen(),
       },
     );
   }
