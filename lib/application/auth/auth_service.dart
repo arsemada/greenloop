@@ -12,13 +12,18 @@ class AuthService {
     );
   }
 
-  //signing up with email and password
- Future<AuthResponse> sigUpInWithEmailAndPassword(String email, String password) async {
-    return await _supabase.auth.signUp(
-      email: email,
-      password: password,
-    );
-  }
+// signing up with email and password and metadata
+Future<AuthResponse> sigUpInWithEmailAndPassword(String email, String password, String firstName, String lastName) async {
+  return await _supabase.auth.signUp(
+    email: email,
+    password: password,
+    data: {
+      'frist_name': firstName,
+      'last_name': lastName,
+    },
+  );
+}
+
   //signing out
 Future<void> signOut() async {
    await _supabase.auth.signOut();
@@ -29,4 +34,19 @@ Future<void> signOut() async {
     final user = session?.user;
     return user?.email;
 }
+// Insert user data to profile table
+Future<void> insertUserProfile({
+  required String id,
+  required String firstName,
+  required String lastName,
+  required String email,
+}) async {
+  await _supabase.from('profile').insert({
+    'id': id, // ✅ Use the user's id from auth.users
+    'frist_name': firstName,
+    'last_name': lastName,
+    'email': email,
+  });
+}
+
 }

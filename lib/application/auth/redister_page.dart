@@ -10,15 +10,20 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
-   final authService = AuthService();
+  final authService = AuthService();
   final  _emailController = TextEditingController();
   final  _passwordController = TextEditingController();
   final  _confirmPassword = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+
 
   void signUp()async{
     final email = _emailController.text;
     final password = _passwordController.text;
     final confirmPassword = _confirmPassword.text;
+      final firstName = _firstNameController.text;
+      final lastName = _lastNameController.text;
 
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -26,21 +31,40 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       return;
     }
-    try {
-      await authService.sigUpInWithEmailAndPassword(email, password);
-      // Navigate to the next page after successful login
-      Navigator.pop(context); // Go back to the previous page
-    } catch (e) {
-      if(mounted){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed')),
-        );
-      }
-    } finally {
-      _emailController.clear();
-      _passwordController.clear();
-      _confirmPassword.clear();
-    }
+try {
+  final response = await authService.sigUpInWithEmailAndPassword(
+  email,
+  password,
+  firstName,
+  lastName,
+);
+
+// ✅ Make sure response.user is valid
+if (response.user != null) {
+  await authService.insertUserProfile(
+    id: response.user!.id, // ✅ Pass the user ID
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+  );
+}
+
+  
+  // Navigate to the next page after successful login
+  Navigator.pop(context); // Go back to the previous page
+} catch (e) {
+  if (mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  }
+} finally {
+  _emailController.clear();
+  _passwordController.clear();
+  _confirmPassword.clear();
+  _firstNameController.clear();
+  _lastNameController.clear();
+}
 
   }
 
@@ -55,6 +79,14 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            TextField(
+              controller: _firstNameController,
+              decoration: const InputDecoration(labelText: 'First Name'),
+            ),
+            TextField(
+              controller: _lastNameController,
+              decoration: const InputDecoration(labelText: 'Last Name'),
+            ),
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
