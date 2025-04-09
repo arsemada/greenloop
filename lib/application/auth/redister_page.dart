@@ -102,6 +102,30 @@ if (response.user != null) {
               decoration: const InputDecoration(labelText: 'Conferm Password'),
               obscureText: true,
             ),
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: authService.getRoles(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Text('No roles available');
+                } else {
+                  final roles = snapshot.data!;
+                  return DropdownButton<String>(
+                    items: roles.map((role) {
+                      return DropdownMenuItem<String>(
+                        value: role['name'],
+                        child: Text(role['name']),
+                      );
+                    }).toList(),
+                    onChanged: (value) {},
+                    hint: const Text('Select Role'),
+                  );
+                }
+              },
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: signUp,

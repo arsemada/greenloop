@@ -1,9 +1,10 @@
+import 'dart:core' as core;
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:core';
 
 
 class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
-
   //sigining in with email and password
   Future<AuthResponse> siginInWithEmailAndPassword(String email, String password) async {
     return await _supabase.auth.signInWithPassword(
@@ -49,4 +50,11 @@ Future<void> insertUserProfile({
   });
 }
 
+// Get user data from profile table
+
+//Get type of roles from role table
+Future<core.List<Map<String, dynamic>>> getRoles() async {
+  final response = await _supabase.rpc('get_roles');
+   return List<Map<String, dynamic>>.from(response as core.List<dynamic>);
+}
 }
